@@ -1,0 +1,48 @@
+{
+  "name": "lpsn-mcp",
+  "version": "0.1.0",
+  "description": "An unofficial MCP (Model Context Protocol) server for the LPSN (List of Prokaryotic names with Standing in Nomenclature) database hosted by DSMZ.",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "lpsn-mcp": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts"
+  },
+  "keywords": [
+    "mcp",
+    "lpsn",
+    "dsmz",
+    "prokaryotic",
+    "nomenclature",
+    "taxonomy",
+    "bacteriology",
+    "model-context-protocol"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ZengZichao/LPSN-MCP.git"
+  },
+  "homepage": "https://github.com/ZengZichao/LPSN-MCP",
+  "bugs": {
+    "url": "https://github.com/ZengZichao/LPSN-MCP/issues"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "cheerio": "^1.0.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.5.0"
+  }
+}
