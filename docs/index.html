@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LPSN-MCP — An MCP Server for the LPSN Prokaryotic Nomenclature Database</title>
+  <meta name="description" content="An unofficial, community-driven MCP (Model Context Protocol) server that provides AI assistants with access to the LPSN (List of Prokaryotic names with Standing in Nomenclature) database hosted by DSMZ.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!--  Top Bar                                                       -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="#top" class="brand">
+      <span class="brand-mark">L</span>
+      <span class="brand-text">LPSN<span class="brand-dash">–</span>MCP</span>
+    </a>
+    <nav class="topnav">
+      <a href="#overview">Overview</a>
+      <a href="#what-is-lpsn">LPSN</a>
+      <a href="#tools">Tools</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#install">Install</a>
+      <a href="#license">License</a>
+    </nav>
+    <a href="https://github.com/ZengZichao/LPSN-MCP" class="gh-link" target="_blank" rel="noopener" aria-label="GitHub repository">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.4 3-.405 1.02.005 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+    </a>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!--  Hero                                                          -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section class="hero" id="top">
+  <div class="hero-inner">
+
+    <div class="hero-eyebrow">
+      <span class="version-badge">v0.1.0</span>
+      <span class="hero-eyebrow-text">MCP Server · TypeScript · MIT License</span>
+    </div>
+
+    <h1 class="hero-title">
+      An MCP Server for the<br>
+      <em>LPSN</em> Prokaryotic Nomenclature Database
+    </h1>
+
+    <p class="hero-subtitle">
+      A bridge between large language model assistants and the
+      <a href="https://lpsn.dsmz.de/" target="_blank" rel="noopener">List of Prokaryotic names with Standing in Nomenclature</a>,
+      hosted by the Leibniz Institute DSMZ.
+    </p>
+
+    <div class="hero-actions">
+      <a href="#install" class="btn btn-primary">Get Started</a>
+      <a href="https://github.com/ZengZichao/LPSN-MCP" class="btn btn-ghost" target="_blank" rel="noopener">View on GitHub &rarr;</a>
+    </div>
+
+    <div class="hero-disclaimer">
+      <strong>⚠ Disclaimer.</strong>
+      This is an unofficial, community-driven MCP server. It is not affiliated with,
+      endorsed by, or officially associated with the Leibniz Institute DSMZ or the LPSN database.
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!--  Overview                                                      -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">01</span>
+      <h2>Overview</h2>
+    </div>
+    <div class="prose">
+      <p>
+        <strong>LPSN-MCP</strong> is a bridge between large language model (LLM) assistants that support the
+        <a href="https://modelcontextprotocol.io/" target="_blank" rel="noopener">Model Context Protocol</a>
+        and the LPSN prokaryotic nomenclature database. It allows an AI assistant — such as
+        Claude Desktop, Cursor, or any MCP-compatible client — to interact with prokaryotic
+        taxonomic data in real time.
+      </p>
+      <p>
+        All data is fetched live from the public LPSN website at
+        <code>https://lpsn.dsmz.de/</code>. No API key or registration is required.
+      </p>
+    </div>
+
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        </div>
+        <h3>Search</h3>
+        <p>Search for prokaryotic names (bacteria and archaea) by full or partial name.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
+        </div>
+        <h3>Retrieve</h3>
+        <p>Get detailed information about any taxon — etymology, type strain, status, synonyms, and more.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 6h18"/><path d="M7 12h18"/><path d="M11 18h18"/><path d="M3 6v0"/><path d="M7 12v0"/><path d="M11 18v0"/></svg>
+        </div>
+        <h3>Classify</h3>
+        <p>Obtain the full classification lineage from domain down to species for any name.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3h18v18H3z"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+        </div>
+        <h3>Browse</h3>
+        <p>Browse taxa by taxonomic rank — domain, phylum, class, order, family, genus, species.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!--  What is LPSN                                                  -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section class="section section-alt" id="what-is-lpsn">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">02</span>
+      <h2>What is LPSN?</h2>
+    </div>
+    <div class="prose">
+      <p>
+        The <strong>List of Prokaryotic names with Standing in Nomenclature (LPSN)</strong> is a publicly
+        available, curated database maintained by the
+        <a href="https://www.dsmz.de/" target="_blank" rel="noopener">Leibniz Institute DSMZ</a>.
+        It provides up-to-date information on all prokaryotic names (Bacteria and Archaea) that have
+        standing in nomenclature under the
+        <em>International Code of Nomenclature of Prokaryotes (ICNP)</em>.
+      </p>
+    </div>
+    <div class="lpsn-info-grid">
+      <div class="info-item">
+        <h4>Taxonomic classification</h4>
+        <p>The classification of each named taxon within the prokaryotic tree of life.</p>
+      </div>
+      <div class="info-item">
+        <h4>Nomenclatural status</h4>
+        <p>Whether a name is validly published, illegitimate, rejected, or under other standing.</p>
+      </div>
+      <div class="info-item">
+        <h4>Etymology</h4>
+        <p>The etymological derivation and meaning of each prokaryotic name.</p>
+      </div>
+      <div class="info-item">
+        <h4>Type strains &amp; species</h4>
+        <p>Reference type strains and type species associated with each taxon.</p>
+      </div>
+      <div class="info-item">
+        <h4>Synonyms &amp; basonyms</h4>
+        <p>Alternative names, synonyms, and previously validly published basonyms.</p>
+      </div>
+      <div class="info-item">
+        <h4>References</h4>
+        <p>Links to IJSEM validation lists and other effective publication sources.</p>
+      </div>
+    </div>
+    <p class="prose-tail">
+      LPSN is widely used by microbiologists, taxonomists, bioinformaticians, and students worldwide.
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!--  Tools                                                         -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section class="section" id="tools">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">03</span>
+      <h2>Available Tools</h2>
+    </div>
+    <p class="section-lead">
+      The server exposes <strong>7 tools</strong> through the Model Context Protocol.
+      Each tool is callable by any MCP-compatible AI assistant.
+    </p>
+
+    <div class="tool-table-wrap">
+      <table class="tool-table">
+        <thead>
+          <tr>
+            <th class="col-num">#</th>
+            <th class="col-tool">Tool</th>
+            <th class="col-desc">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="col-num">1</td>
+            <td><code>search_taxa</code></td>
+            <td>Search for prokaryotic names by full or partial name.</td>
+          </tr>
+          <tr>
+            <td class="col-num">2</td>
+            <td><code>get_taxon_detail</code></td>
+            <td>Get full detail for a specific taxon — etymology, type strain, synonyms, etc.</td>
+          </tr>
+          <tr>
+            <td class="col-num">3</td>
+            <td><code>get_classification</code></td>
+            <td>Get the complete lineage from domain to the target taxon.</td>
+          </tr>
+          <tr>
+            <td class="col-num">4</td>
+            <td><code>browse_by_rank</code></td>
+            <td>Browse all taxa at a given rank, optionally filtered by first letter.</td>
+          </tr>
+          <tr>
+            <td class="col-num">5</td>
+            <td><code>get_nomenclature_info</code></td>
+            <td>Read the nomenclature rules page from LPSN.</td>
+          </tr>
+          <tr>
+            <td class="col-num">6</td>
+            <td><code>get_classification_info</code></td>
+            <td>Read the classification information page from LPSN.</td>
+          </tr>
+          <tr>
+            <td class="col-num">7</td>
+            <td><code>get_text_page</code></td>
+            <td>Read any LPSN informational text page by path.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Usage examples -->
+    <h3 class="subsection-title">Usage Examples</h3>
+    <p class="section-lead">
+      Once configured, you can ask your AI assistant natural-language questions such as:
+    </p>
+    <div class="example-list">
+      <div class="example-item">
+        <span class="example-prompt">&ldquo;Search LPSN for <em>Escherichia coli</em>&rdquo;</span>
+      </div>
+      <div class="example-item">
+        <span class="example-prompt">&ldquo;Get detailed information about the genus <em>Bacillus</em> from LPSN&rdquo;</span>
+      </div>
+      <div class="example-item">
+        <span class="example-prompt">&ldquo;What is the full classification of <em>Methanococcus jannaschii</em>?&rdquo;</span>
+      </div>
+      <div class="example-item">
+        <span class="example-prompt">&ldquo;Browse all families in LPSN starting with the letter 'A'&rdquo;</span>
+      </div>
+      <div class="example-item">
+        <span class="example-prompt">&ldquo;What are the prokaryotic nomenclature rules according to LPSN?&rdquo;</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!--  Architecture                                                  -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section class="section section-alt" id="architecture">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">04</span>
+      <h2>Architecture</h2>
+    </div>
+    <p class="section-lead">
+      The project is written in <strong>TypeScript</strong> (strict mode, ES2022) and uses ES modules.
+    </p>
+
+    <div class="arch-diagram">
+      <div class="arch-layer arch-layer-client">
+        <div class="arch-layer-label">MCP Client</div>
+        <div class="arch-boxes">
+          <div class="arch-box">Claude Desktop</div>
+          <div class="arch-box">Cursor</div>
+          <div class="arch-box">Any MCP Client</div>
+        </div>
+      </div>
+      <div class="arch-arrow">↓ stdio · JSON-RPC</div>
+      <div class="arch-layer arch-layer-server">
+        <div class="arch-layer-label">LPSN-MCP Server</div>
+        <div class="arch-boxes">
+          <div class="arch-box arch-box-highlight">
+            <strong>index.ts</strong><br>
+            <span>Tool definitions · Zod validation · MCP SDK</span>
+          </div>
+          <div class="arch-box arch-box-highlight">
+            <strong>lpsn-fetcher.ts</strong><br>
+            <span>HTTP fetch · cheerio HTML parsing</span>
+          </div>
+        </div>
+      </div>
+      <div class="arch-arrow">↓ HTTPS · fetch</div>
+      <div class="arch-layer arch-layer-data">
+        <div class="arch-layer-label">Data Source</div>
+        <div class="arch-boxes">
+          <div class="arch-box arch-box-external">
+            <strong>LPSN</strong><br>
+            <span>lpsn.dsmz.de</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arch-code">
+<pre><code>lpsn-mcp/
+├── package.json          – NPM package definition &amp; scripts
+├── tsconfig.json         – TypeScript compiler configuration
+├── src/
+│   ├── index.ts          – MCP server entry point &amp; tool definitions
+│   └── lpsn-fetcher.ts   – LPSN website fetcher &amp; HTML parser
+├── dist/                 – Compiled output (npm run build)
+└── README.md             – Documentation
+</code></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!--  Install                                                       -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section class="section" id="install">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">05</span>
+      <h2>Installation &amp; Configuration</h2>
+    </div>
+
+    <h3 class="subsection-title">Prerequisites</h3>
+    <ul class="checklist">
+      <li><strong>Node.js</strong> &ge; 18.0.0 <span class="muted">(native <code>fetch</code> and <code>AbortController</code>)</span></li>
+      <li><strong>npm</strong> &ge; 9.0.0 <span class="muted">(or pnpm / yarn)</span></li>
+    </ul>
+
+    <h3 class="subsection-title">Clone &amp; Build</h3>
+    <div class="code-block">
+<pre><code><span class="c-comment"># Clone the repository</span>
+git clone https://github.com/ZengZichao/LPSN-MCP.git lpsn-mcp
+<span class="c-comment">cd</span> lpsn-mcp
+
+<span class="c-comment"># Install dependencies</span>
+npm install
+
+<span class="c-comment"># Compile TypeScript to dist/</span>
+npm run build</code></pre>
+    </div>
+
+    <h3 class="subsection-title">Configure in Claude Desktop</h3>
+    <p class="section-lead">Add the following to your <code>claude_desktop_config.json</code>:</p>
+    <div class="code-block">
+<pre><code>{
+  <span class="c-key">"mcpServers"</span>: {
+    <span class="c-key">"lpsn"</span>: {
+      <span class="c-key">"command"</span>: <span class="c-str">"node"</span>,
+      <span class="c-key">"args"</span>: [
+        <span class="c-str">"/absolute/path/to/lpsn-mcp/dist/index.js"</span>
+      ]
+    }
+  }
+}</code></pre>
+    </div>
+
+    <h3 class="subsection-title">Configure in Cursor</h3>
+    <div class="code-block">
+<pre><code>{
+  <span class="c-key">"mcp.servers"</span>: {
+    <span class="c-key">"lpsn"</span>: {
+      <span class="c-key">"command"</span>: <span class="c-str">"node"</span>,
+      <span class="c-key">"args"</span>: [<span class="c-str">"/absolute/path/to/lpsn-mcp/dist/index.js"</span>]
+    }
+  }
+}</code></pre>
+    </div>
+
+    <h3 class="subsection-title">Available Scripts</h3>
+    <div class="tool-table-wrap">
+      <table class="tool-table">
+        <thead>
+          <tr>
+            <th class="col-tool">Command</th>
+            <th class="col-desc">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>npm run build</code></td>
+            <td>Compile TypeScript to <code>dist/</code></td>
+          </tr>
+          <tr>
+            <td><code>npm run start</code></td>
+            <td>Run the compiled server</td>
+          </tr>
+          <tr>
+            <td><code>npm run dev</code></td>
+            <td>Run with <code>tsx</code> (no compilation needed)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!--  Limitations                                                   -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section class="section section-alt" id="limitations">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-number">06</span>
+      <h2>Limitations &amp; Disclaimer</h2>
+    </div>
+    <div class="limit-grid">
+      <div class="limit-item">
+        <span class="limit-num">1</span>
+        <div>
+          <h4>Unofficial project</h4>
+          <p>This is an unofficial, community-driven MCP server, not affiliated with or endorsed by DSMZ or LPSN.</p>
+        </div>
+      </div>
+      <div class="limit-item">
+        <span class="limit-num">2</span>
+        <div>
+          <h4>Web scraping, not an official API</h4>
+          <p>Data is obtained by parsing public LPSN HTML pages. If the page layout changes, parsing may break.</p>
+        </div>
+      </div>
+      <div class="limit-item">
+        <span class="limit-num">3</span>
+        <div>
+          <h4>Rate limiting</h4>
+          <p>LPSN is a public resource. Please use this tool responsibly and avoid excessive requests.</p>
+        </div>
+      </div>
+      <div class="limit-item">
+        <span class="limit-num">4</span>
+        <div>
+          <h4>No warranty</h4>
+          <p>Data is provided "as is" from LPSN. Always verify critical information on the official website.</p>
+        </div>
+      </div>
+      <div class="limit-item">
+        <span class="limit-num">5</span>
+        <div>
+          <h4>Network dependency</h4>
+          <p>The server requires an active internet connection to reach <code>https://lpsn.dsmz.de/</code>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!--  License & Footer                                              -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<footer class="footer" id="license">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <div class="footer-brand">LPSN-MCP</div>
+        <p class="footer-desc">
+          An unofficial MCP server for the LPSN prokaryotic nomenclature database.
+        </p>
+        <p class="footer-license">
+          Released under the <a href="https://github.com/ZengZichao/LPSN-MCP/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>.
+        </p>
+      </div>
+      <div class="footer-right">
+        <div class="footer-links">
+          <a href="https://github.com/ZengZichao/LPSN-MCP" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://lpsn.dsmz.de/" target="_blank" rel="noopener">LPSN</a>
+          <a href="https://modelcontextprotocol.io/" target="_blank" rel="noopener">MCP</a>
+          <a href="https://www.dsmz.de/" target="_blank" rel="noopener">DSMZ</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 LPSN-MCP contributors. Not affiliated with DSMZ or LPSN.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // Topbar shadow on scroll
+  const topbar = document.querySelector('.topbar');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 10) topbar.classList.add('scrolled');
+    else topbar.classList.remove('scrolled');
+  });
+</script>
+
+</body>
+</html>
